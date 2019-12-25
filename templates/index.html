@@ -19,12 +19,17 @@
 
 
 
-  <ul class="navbar-nav">
+  <ul class="navbar-nav" style="width: 100%;">
     <li class="nav-item"><a class="nav-link" href="/person">Person</a></li>
     <li class="nav-item"><a class="nav-link" href="/function">Function</a></li>
     <li class="nav-item"><a class="nav-link" href="/testcase">Test Case</a></li>
     <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+    {% if session["login"] %}
+      <li class="nav-item" style="margin-left: auto"><a class="nav-link" href="/login">{{session["login"]}}</a></li>
+      <li class="nav-item"><a class="nav-link" href="/logout">Sign out</a></li>
+    {% else %}
+      <li class="nav-item" style="margin-left: auto"><a class="nav-link" href="/login">Sign in</a></li>
+    {% endif %}
   </ul>
 
 </nav>

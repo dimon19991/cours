@@ -15,6 +15,6 @@ class Login(Form):
                                     validators.Length(3, 20, "Name should be from 3 to 20 symbols")
                                  ])
 
-   submit = SubmitField("Sign up")
+   submit = SubmitField("Sign in")
 
 

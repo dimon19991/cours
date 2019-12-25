@@ -637,11 +637,25 @@ def login():
             return render_template('login.html', form=form, form_name="Sign up", action="login")
 
         else:
-            result = db.session.query(ormPersons).filter(ormPersons.person_login == form.person_login.data).one()
+            try:
+                result = db.session.query(ormPersons).filter(ormPersons.person_login == form.person_login.data).one()
+            except:
+                return render_template('login.html', form=form, form_name="Sign up", action="login",
+                                       login="Неправельный логин или пароль")
 
             if result.person_password == form.person_password.data:
-                session['login'] = form.person_login.data
-                return redirect(url_for('root'))
+                session["login"] = form.person_login.data
+                return render_template("index.html")
+            else:
+                return render_template('login.html', form=form, form_name="Sign up", action="login", login="Неправельный логин или пароль")
+
+    return render_template('login.html', form=form, form_name="Sign up", action="login")
+
+
+@app.route('/logout', methods=['GET', 'POST'])
+def logout():
+    form = Login()
+    session.clear()
 
     return render_template('login.html', form=form, form_name="Sign up", action="login")
 
