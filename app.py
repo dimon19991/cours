@@ -8,6 +8,7 @@ from sqlalchemy.sql import func
 import plotly
 import json
 import plotly.graph_objs as go
+from werkzeug import secure_filename
 
 # from dao.orm.model import *
 
@@ -353,6 +354,13 @@ def new_person():
         if not form.validate():
             return render_template('person_form.html', form=form, form_name="New person", action="new_person")
         else:
+            filename = ""
+            if form.person_photo.data:
+
+                filename = secure_filename(form.person_photo.data.filename)
+                form.person_photo.data.save('photos/' + form.person_login.data + "." + filename.split(".")[1])
+
+
             new_person = ormPersons(
                 person_login=form.person_login.data,
                 person_password=form.person_password.data,
@@ -361,16 +369,8 @@ def new_person():
                 person_email=form.person_email.data,
                 person_birthday=form.person_birthday.data.strftime("%d-%b-%y"),
                 person_status="user",
-                person_photo=""
+                person_photo='photos/' + form.person_login.data + "." + filename.split(".")[1]
             )
-
-            # form.person_photo
-            #
-            # file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-            form.person_photo.data.save('photos/' + form.person_photo.data.filename)
-
-            # new_person.person_photo
 
             db.session.add(new_person)
             db.session.commit()
